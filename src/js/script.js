@@ -52,7 +52,7 @@ const select = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
   };
 
-  class Product{
+  class Product {
     constructor(id, data){
     const thisProduct = this;
     this.id = id;
@@ -80,24 +80,30 @@ const select = {
 
     initAccordion(){
       const thisProduct = this;
-      
-    /* find the clickable trigger (the element that should react to clicking) */
-    // const clickableTrigger = ???;
+      // console.log(thisProduct);
+          
+      /* [DONE] find the clickable trigger (the element that should react to clicking) */
+      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      // console.log(clickableTrigger);
+    
+      /* [DONE] START: add event listener to clickable trigger on event click */
+      clickableTrigger.addEventListener('click', function(event) {
+        /* [DONE] prevent default action for event */
+        event.preventDefault()
 
-    /* START: add event listener to clickable trigger on event click */
-    clickableTrigger.addEventListener('click', function(event) {
-      /* prevent default action for event */
-      event.preventDefault()
+        /* [DONE]find active product (product that has active class) */
+        const artActive = document.querySelector('article.active')
+        // console.log(artActive);
 
-      /* find active product (product that has active class) */
+        /* [DONE] if there is active product and it's not thisProduct.element, remove class active from it */
+        if (artActive && artActive !== thisProduct.element) {
+          artActive.classList.remove('active')
+        }
+        /* toggle active class on thisProduct.element */
+        thisProduct.element.classList.toggle('active')
+      });
 
-      /* if there is active product and it's not thisProduct.element, remove class active from it */
-
-      /* toggle active class on thisProduct.element */
-    });
-
-  }
-
+    }
   }
   
   const app = {
