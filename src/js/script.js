@@ -156,32 +156,33 @@
 				for (let optionId in param.options) {
 					// determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
 					const option = param.options[optionId]
-					// console.log(optionId, option)
 
-					// check if price need to be changed (steps 1-3)
-					console.log('option:', option, 'optionID:', optionId)
-					console.log(formData[paramId], optionId)
+					// check if price needs to be changed (steps 1-3)
 
-					//1) if default and  checked or not detault not checked - price unchanged
-					if (formData[paramId] == optionId && option.default) {
-						console.log('price not changed')
+					//1) if default and unchecked - price decrease
+					if (!formData[paramId].includes(optionId) && option.default) {
+						price -= option.price
 					}
 
-          if (formData[paramId] != optionId && option.default) {
-						console.log('price decrease')
+					//2) if not default and checked - price increase
+					if (formData[paramId].includes(optionId) && !option.default) {
+						price += option.price
 					}
 
-					//2) if default and unchecked - price decrease
-				
-					// 3) if not default and checked - price increase
-					if (formData[paramId] == optionId && !option.default) {
-						console.log('increase')
-					}
+					//3) if default and  checked or not detault not checked - price unchanged
+
+					// if (formData[paramId].includes(optionId) && option.default) {
+					// 	console.log('price not changed')
+					// }
+
+					// if (!formData[paramId].includes(optionId) && !option.default) {
+					// 	console.log('price not changed')
+					// }
 				}
-			}
 
-			// update calculated price in the HTML
-			thisProduct.priceElem.innerHTML = price
+				// update calculated price in the HTML
+				thisProduct.priceElem.innerHTML = price
+			}
 		}
 	}
 
@@ -204,11 +205,11 @@
 
 		init: function () {
 			const thisApp = this
-			// console.log('*** App starting ***')
-			// console.log('thisApp:', thisApp)
-			// console.log('classNames:', classNames)
-			// console.log('settings:', settings)
-			// console.log('templates:', templates)
+			console.log('*** App starting ***')
+			console.log('thisApp:', thisApp)
+			console.log('classNames:', classNames)
+			console.log('settings:', settings)
+			console.log('templates:', templates)
 
 			thisApp.initData()
 			thisApp.initMenu()
