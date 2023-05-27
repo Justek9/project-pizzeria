@@ -89,6 +89,8 @@
 			thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs)
 			thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton)
 			thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem)
+			thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper)
+			console.log(thisProduct.imageWrapper)
 		}
 
 		initAccordion() {
@@ -106,10 +108,10 @@
 
 				/* [DONE] if there is active product and it's not thisProduct.element, remove class active from it */
 				if (artActive && artActive !== thisProduct.element) {
-					artActive.classList.remove('active')
+					artActive.classList.remove(classNames.menuProduct.wrapperActive)
 				}
 				/* toggle active class on thisProduct.element */
-				thisProduct.element.classList.toggle('active')
+				thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive)
 			})
 		}
 
@@ -139,48 +141,54 @@
 		processOrder() {
 			const thisProduct = this
 
-			// covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
+			// [DONE] covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
 			const formData = utils.serializeFormToObject(thisProduct.form)
 			console.log('formData', formData)
 
-			// set price to default price
+			// [DONE] set price to default price
 			let price = thisProduct.data.price
 
 			// for every category (param)...
 			for (let paramId in thisProduct.data.params) {
-				// determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
+				// [DONE] determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
 				const param = thisProduct.data.params[paramId]
-				console.log(paramId, param)
+				// console.log(paramId, param)
 
-				// for every option in this category
+				// [DONE] for every option in this category
 				for (let optionId in param.options) {
-					// determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
+					// [DONE] determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
 					const option = param.options[optionId]
+					// console.log(optionId, option)
 
-					// check if price needs to be changed (steps 1-3)
+					// [DONE] check if price needs to be changed (steps 1-2)
 
-					//1) if default and unchecked - price decrease
+					//1) [DONE] if default and unchecked - price decrease
 					if (!formData[paramId].includes(optionId) && option.default) {
 						price -= option.price
 					}
 
-					//2) if not default and checked - price increase
+					//2)[DONE] if not default and checked - price increase
 					if (formData[paramId].includes(optionId) && !option.default) {
 						price += option.price
 					}
 
-					//3) if default and  checked or not detault not checked - price unchanged
+					// [DONE] toggle img display: remove active class and add to to checked option
+					if (thisProduct.imageWrapper.querySelector(`.${paramId}-${optionId}`))
+						thisProduct.imageWrapper
+							.querySelector(`.${paramId}-${optionId}`)
+							.classList.remove(classNames.menuProduct.imageVisible)
 
-					// if (formData[paramId].includes(optionId) && option.default) {
-					// 	console.log('price not changed')
-					// }
-
-					// if (!formData[paramId].includes(optionId) && !option.default) {
-					// 	console.log('price not changed')
-					// }
+					if (
+						thisProduct.imageWrapper.querySelector(`.${paramId}-${optionId}`) &&
+						formData[paramId].includes(optionId)
+					) {
+						thisProduct.imageWrapper
+							.querySelector(`.${paramId}-${optionId}`)
+							.classList.add(classNames.menuProduct.imageVisible)
+					}
 				}
 
-				// update calculated price in the HTML
+				// [DONE] update calculated price in the HTML
 				thisProduct.priceElem.innerHTML = price
 			}
 		}
