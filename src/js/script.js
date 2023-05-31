@@ -1,7 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
-	;('use strict')
+	('use strict')
 
 	const select = {
 		templateOf: {
@@ -98,6 +98,9 @@
 		initAmountWidget() {
 			const thisProduct = this
 			thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem)
+			thisProduct.amountWidgetElem.addEventListener('updated', function () {
+				thisProduct.processOrder()
+			})
 		}
 
 		initAccordion() {
@@ -194,17 +197,18 @@
 							.classList.add(classNames.menuProduct.imageVisible)
 					}
 				}
-
-				// [DONE] update calculated price in the HTML
-				thisProduct.priceElem.innerHTML = price
 			}
+			// multiply price by amount
+			price *= thisProduct.amountWidget.value
+
+			// [DONE] update calculated price in the HTML
+			thisProduct.priceElem.innerHTML = price
 		}
 	}
 
 	const app = {
 		initMenu: function () {
 			const thisApp = this
-
 			// console.log('thisApp.data:', thisApp.data)
 
 			for (let productData in thisApp.data.products) {
@@ -230,13 +234,14 @@
 			thisApp.initMenu()
 		},
 	}
+
 	class AmountWidget {
 		constructor(element) {
 			const thisWidget = this
-			console.log('AmountWidget:', thisWidget)
-			console.log('constructor arguments', element)
+			// console.log('AmountWidget:', thisWidget)
+			// console.log('constructor arguments', element)
 			thisWidget.getElements(element)
-			thisWidget.setValue(thisWidget.input.value)
+			thisWidget.setValue(settings.amountWidget.defaultValue)
 			thisWidget.initActions()
 		}
 
@@ -265,25 +270,30 @@
 				thisWidget.value = newValue
 			}
 			thisWidget.input.value = thisWidget.value
+			this.announce()
 		}
 
 		initActions() {
 			const thisWidget = this
 
 			thisWidget.input.addEventListener('change', function () {
-				// console.log('input changed')
 				thisWidget.setValue(thisWidget.input.value)
 			})
 			thisWidget.linkDecrease.addEventListener('click', function (event) {
 				event.preventDefault()
-				// console.log('minus clicked')
 				thisWidget.setValue(+thisWidget.input.value - 1)
 			})
 			thisWidget.linkIncrease.addEventListener('click', function (event) {
 				event.preventDefault()
-				// console.log('plus clicked')
 				thisWidget.setValue(+thisWidget.input.value + 1)
 			})
+		}
+
+		announce() {
+			const thisWidget = this
+			const event = new Event('updated')
+			// console.log(thisWidget.element)
+			thisWidget.element.dispatchEvent(event)
 		}
 	}
 
