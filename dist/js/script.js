@@ -189,7 +189,7 @@
 
 			// [DONE] covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
 			const formData = utils.serializeFormToObject(thisProduct.form)
-			// console.log('formData', formData)
+			console.log('formData', formData)
 
 			// [DONE] set price to default price
 			let price = thisProduct.data.price
@@ -198,13 +198,13 @@
 			for (let paramId in thisProduct.data.params) {
 				// [DONE] determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
 				const param = thisProduct.data.params[paramId]
-				// console.log(paramId, param)
+				console.log(paramId, param)
 
 				// [DONE] for every option in this category
 				for (let optionId in param.options) {
 					// [DONE] determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
 					const option = param.options[optionId]
-					// console.log(optionId, option)
+					console.log(optionId, option)
 
 					// [DONE] check if price needs to be changed (steps 1-2)
 
@@ -250,19 +250,44 @@
 
 		prepareCartProduct() {
 			const thisProduct = this
-
-			// console.log(thisProduct.data.amount)
-
 			const productSummary = {
 				id: thisProduct.id,
 				name: thisProduct.data.name,
-				// amount: thisProduct.amount,
-				// priceSingle: thisProduct.priceSingle / thisProduct.amount,
-				// price: thisProduct.price,
-				// params: {},
+				amount: thisProduct.amountWidget.value,
+				priceSingle: thisProduct.price / thisProduct.amountWidget.value,
+				price: thisProduct.price,
+				params: thisProduct.prepareCartProductParams(),
 			}
-			// console.log(productSummary)
 			return productSummary
+		}
+
+		prepareCartProductParams() {
+			const thisProduct = this
+
+			let paramsToCart = {}
+
+			// [DONE] covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
+			const formData = utils.serializeFormToObject(thisProduct.form)
+
+			// for every category (param)...
+			for (let paramId in thisProduct.data.params) {
+				// [DONE] determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
+				const param = thisProduct.data.params[paramId]
+				paramsToCart[paramId] = { label: param.label, options: {} }
+				// [DONE] for every option in this category
+				for (let optionId in param.options) {
+					// console.log('paramId:', paramId, 'optionId:', optionId)
+
+					// [DONE] determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
+					const option = param.options[optionId]
+
+					if (formData[paramId].includes(optionId)) {
+						paramsToCart[paramId].options[optionId] = option.label
+					}
+				}
+			}
+
+			return paramsToCart
 		}
 
 		addToCart() {
@@ -285,6 +310,7 @@
 			thisCart.dom = {}
 			thisCart.dom.wrapper = element
 			thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger)
+			thisCart.dom.productList = element.querySelector(select.cart.productList)
 		}
 
 		initActions() {
@@ -297,6 +323,25 @@
 		add(menuProduct) {
 			// const thisCart = this
 			console.log('adding product:', menuProduct)
+
+			// z innej metody start:
+
+			const thisProduct = this
+
+			// generate HTML based on tempalte
+			const generatedHTML = templates.menuProduct(thisProduct.data)
+
+			// create element using utils.createElementFromHtml
+			thisProduct.element = utils.createDOMFromHTML(generatedHTML)
+
+			// find menu container
+			const menuContainer = document.querySelector(select.containerOf.menu)
+
+			// add element to menu
+			menuContainer.appendChild(thisProduct.element)
+
+			// z innej metody stop
+
 		}
 	}
 
