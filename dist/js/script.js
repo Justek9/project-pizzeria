@@ -1,7 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
-	('use strict')
+	;('use strict')
 
 	const select = {
 		templateOf: {
@@ -296,7 +296,7 @@
 	class Cart {
 		constructor(element) {
 			const thisCart = this
-			thisCart.Product = []
+			thisCart.products = []
 			thisCart.getElements(element)
 			thisCart.initActions()
 			console.log('new cart:', thisCart)
@@ -327,13 +327,42 @@
 
 			// create element using utils.createElementFromHtml
 			const generatedDOM = utils.createDOMFromHTML(generatedHTML)
-			console.log(generatedDOM);
+			console.log(generatedDOM)
 
 			// find cart container
 			thisCart.dom.productList = document.querySelector(select.cart.productList)
 
 			// add element to menu
 			thisCart.dom.productList.appendChild(generatedDOM)
+
+			thisCart.products.push(menuProduct)
+			console.log('thisCart.products', thisCart.products)
+		}
+	}
+
+	class CartProduct {
+		constructor(menuProduct, element) {
+			const thisCartPrduct = this
+			thisCartPrduct.id = menuProduct.id
+			thisCartPrduct.name = menuProduct.name
+			thisCartPrduct.amount = menuProduct.amount
+			thisCartPrduct.priceSingle = menuProduct.priceSingle
+			thisCartPrduct.price = menuProduct.price
+			thisCartPrduct.params = menuProduct.params
+			console.log(thisCartPrduct)
+			thisCartPrduct.getElements(element)
+		}
+
+		getElements(element) {
+			const thisCartProduct = this
+			thisCartProduct.dom = {}
+			thisCartProduct.dom.wrapper = element
+			thisCartProduct.dom.amountWidget = element.querySelector(select.cartProduct.amountWidget)
+			thisCartProduct.dom.price = element.querySelector(select.cartProduct.price)
+			thisCartProduct.dom.edit = element.querySelector(select.cartProduct.edit)
+			thisCartProduct.dom.remove = element.querySelector(select.cartProduct.remove)
+
+			// console.log();
 		}
 	}
 
