@@ -1,7 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
-	;('use strict')
+	('use strict')
 
 	const select = {
 		templateOf: {
@@ -261,7 +261,7 @@
 		prepareCartProductParams() {
 			const thisProduct = this
 
-			let paramsToCart = {}
+			let params = {}
 
 			// [DONE] covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
 			const formData = utils.serializeFormToObject(thisProduct.form)
@@ -270,7 +270,7 @@
 			for (let paramId in thisProduct.data.params) {
 				// [DONE] determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
 				const param = thisProduct.data.params[paramId]
-				paramsToCart[paramId] = { label: param.label, options: {} }
+				params[paramId] = { label: param.label, options: {} }
 				// [DONE] for every option in this category
 				for (let optionId in param.options) {
 					// console.log('paramId:', paramId, 'optionId:', optionId)
@@ -279,12 +279,12 @@
 					const option = param.options[optionId]
 
 					if (formData[paramId].includes(optionId)) {
-						paramsToCart[paramId].options[optionId] = option.label
+						params[paramId].options[optionId] = option.label
 					}
 				}
 			}
 
-			return paramsToCart
+			return params
 		}
 
 		addToCart() {
@@ -308,6 +308,7 @@
 			thisCart.dom.wrapper = element
 			thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger)
 			thisCart.dom.productList = element.querySelector(select.cart.productList)
+			console.log(thisCart.dom)
 		}
 
 		initActions() {
@@ -326,13 +327,13 @@
 
 			// create element using utils.createElementFromHtml
 			const generatedDOM = utils.createDOMFromHTML(generatedHTML)
+			console.log(generatedDOM);
 
 			// find cart container
-			thisCart.dom.productList = document.querySelector(select.containerOf.cart)
+			thisCart.dom.productList = document.querySelector(select.cart.productList)
 
 			// add element to menu
 			thisCart.dom.productList.appendChild(generatedDOM)
-
 		}
 	}
 
