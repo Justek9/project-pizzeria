@@ -1,7 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
-	('use strict')
+	;('use strict')
 
 	const select = {
 		templateOf: {
@@ -127,7 +127,7 @@
 			thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem)
 			thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper)
 			thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget)
-			console.log(thisProduct.amountWidgetElem)
+			// console.log(thisProduct.amountWidgetElem)
 		}
 
 		initAmountWidget() {
@@ -179,6 +179,7 @@
 			thisProduct.cartButton.addEventListener('click', function (event) {
 				event.preventDefault()
 				thisProduct.processOrder()
+				thisProduct.addToCart()
 				// console.log('cart button clicked');
 			})
 		}
@@ -233,11 +234,40 @@
 					}
 				}
 			}
+
+			// add single price
+			thisProduct.priceSingle = price
 			// multiply price by amount
 			price *= thisProduct.amountWidget.value
 
-			// [DONE] update calculated price in the HTML
-			thisProduct.priceElem.innerHTML = price
+			// [DONE] update calculated price in the HTML and andd total price to further push to cart
+
+			thisProduct.price = thisProduct.priceElem.innerHTML = price
+
+			// console.log(thisProduct.priceSingle)
+			// console.log(thisProduct.price)
+		}
+
+		prepareCartProduct() {
+			const thisProduct = this
+
+			// console.log(thisProduct.data.amount)
+
+			const productSummary = {
+				id: thisProduct.id,
+				name: thisProduct.data.name,
+				// amount: thisProduct.amount,
+				// priceSingle: thisProduct.priceSingle / thisProduct.amount,
+				// price: thisProduct.price,
+				// params: {},
+			}
+			// console.log(productSummary)
+			return productSummary
+		}
+
+		addToCart() {
+			const thisProduct = this
+			app.cart.add(thisProduct.prepareCartProduct())
 		}
 	}
 
@@ -263,6 +293,11 @@
 				thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive)
 			})
 		}
+
+		add(menuProduct) {
+			// const thisCart = this
+			console.log('adding product:', menuProduct)
+		}
 	}
 
 	const app = {
@@ -284,7 +319,8 @@
 		initCart: function () {
 			const thisApp = this
 			const cartElem = document.querySelector(select.containerOf.cart)
-			thisApp.Cart = new Cart(cartElem)
+			thisApp.cart = new Cart(cartElem)
+			// console.log(app.cart)
 		},
 
 		init: function () {
@@ -318,7 +354,7 @@
 			thisWidget.linkDecrease = element.querySelector(select.widgets.amount.linkDecrease)
 			thisWidget.linkIncrease = element.querySelector(select.widgets.amount.linkIncrease)
 
-			console.log(thisWidget.input, thisWidget.linkDecrease, thisWidget.linkIncrease)
+			// console.log(thisWidget.input, thisWidget.linkDecrease, thisWidget.linkIncrease)
 		}
 
 		setValue(value) {
