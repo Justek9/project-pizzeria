@@ -1,7 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
-	;('use strict')
+	('use strict')
 
 	const select = {
 		templateOf: {
@@ -335,7 +335,7 @@
 			// add element to menu
 			thisCart.dom.productList.appendChild(generatedDOM)
 
-			thisCart.products.push(menuProduct)
+			thisCart.products.push(new CartProduct(menuProduct, generatedDOM))
 			console.log('thisCart.products', thisCart.products)
 		}
 	}
@@ -351,6 +351,7 @@
 			thisCartPrduct.params = menuProduct.params
 			console.log(thisCartPrduct)
 			thisCartPrduct.getElements(element)
+			thisCartPrduct.cartAmountWidget()
 		}
 
 		getElements(element) {
@@ -361,8 +362,14 @@
 			thisCartProduct.dom.price = element.querySelector(select.cartProduct.price)
 			thisCartProduct.dom.edit = element.querySelector(select.cartProduct.edit)
 			thisCartProduct.dom.remove = element.querySelector(select.cartProduct.remove)
+		}
 
-			// console.log();
+		cartAmountWidget() {
+			const thisCartProduct = this
+			thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget)
+			thisCartProduct.dom.amountWidget.addEventListener('updated', function () {
+				console.log('amount widget changed')
+			})
 		}
 	}
 
@@ -380,6 +387,7 @@
 		initData: function () {
 			const thisApp = this
 			thisApp.data = dataSource
+			console.log(dataSource)
 		},
 
 		initCart: function () {
