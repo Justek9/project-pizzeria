@@ -1,7 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
-	;('use strict')
+	('use strict')
 
 	const select = {
 		templateOf: {
@@ -70,7 +70,7 @@
 	const settings = {
 		amountWidget: {
 			defaultValue: 1,
-			defaultMin: 1,
+			defaultMin: 0,
 			defaultMax: 9,
 		}, // CODE CHANGED
 		// CODE ADDED START
@@ -299,7 +299,7 @@
 			thisCart.products = []
 			thisCart.getElements(element)
 			thisCart.initActions()
-			console.log('new cart:', thisCart)
+			// console.log('new cart:', thisCart)
 		}
 
 		getElements(element) {
@@ -308,7 +308,12 @@
 			thisCart.dom.wrapper = element
 			thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger)
 			thisCart.dom.productList = element.querySelector(select.cart.productList)
-			console.log(thisCart.dom)
+			thisCart.dom.deliveryFee = element.querySelector(select.cart.deliveryFee)
+			thisCart.dom.subtotalPrice = element.querySelector(select.cart.subtotalPrice)
+			thisCart.dom.totalPrice = element.querySelectorAll(select.cart.totalPrice)
+			console.log(element.querySelector(select.cart.totalPrice))
+			thisCart.dom.totalNumber = element.querySelector(select.cart.totalNumber)
+			// console.log(thisCart.dom)
 		}
 
 		initActions() {
@@ -320,14 +325,14 @@
 
 		add(menuProduct) {
 			const thisCart = this
-			console.log('adding product:', menuProduct)
+			// console.log('adding product:', menuProduct)
 
 			// generate HTML based on tempalte
 			const generatedHTML = templates.cartProduct(menuProduct)
 
 			// create element using utils.createElementFromHtml
 			const generatedDOM = utils.createDOMFromHTML(generatedHTML)
-			console.log(generatedDOM)
+			// console.log(generatedDOM)
 
 			// find cart container
 			thisCart.dom.productList = document.querySelector(select.cart.productList)
@@ -337,12 +342,41 @@
 
 			thisCart.products.push(new CartProduct(menuProduct, generatedDOM))
 			console.log('thisCart.products', thisCart.products)
+			thisCart.update()
+		}
+
+		update() {
+			const thisCart = this
+			let deliveryFee = settings.cart.defaultDeliveryFee
+			let totalNumber = 0
+			let subtotalPrice = 0
+
+			for (const product of thisCart.products) {
+				// console.log(product)
+				totalNumber += product.amount
+				subtotalPrice += product.price
+				// console.log(totalNumber, subtotalPrice)
+			}
+
+			// console.log(totalNumber)
+			totalNumber === 0 ? (thisCart.totalPrice = 0) : (thisCart.totalPrice = subtotalPrice + deliveryFee)
+			console.log(totalNumber)
+
+			// console.log(deliveryFee, subtotalPrice, thisCart.totalPrice, totalNumber)
+			thisCart.dom.deliveryFee.innerHTML = deliveryFee
+			thisCart.dom.subtotalPrice.innerHTML = subtotalPrice
+			thisCart.dom.totalNumber.innerHTML = totalNumber
+			
+			// console.log(thisCart.dom.totalPrice)
+			for (let totalPrice of thisCart.dom.totalPrice) {
+				totalPrice.innerHTML = thisCart.totalPrice
+			}
 		}
 	}
 
 	class CartProduct {
 		constructor(menuProduct, element) {
-			console.log(element)
+			// console.log(element)
 			const thisCartProduct = this
 			thisCartProduct.id = menuProduct.id
 			thisCartProduct.name = menuProduct.name
@@ -395,7 +429,7 @@
 		initData: function () {
 			const thisApp = this
 			thisApp.data = dataSource
-			console.log(dataSource)
+			// console.log(dataSource)
 		},
 
 		initCart: function () {
@@ -407,11 +441,11 @@
 
 		init: function () {
 			const thisApp = this
-			console.log('*** App starting ***')
+			// console.log('*** App starting ***')
 			console.log('thisApp:', thisApp)
-			console.log('classNames:', classNames)
-			console.log('settings:', settings)
-			console.log('templates:', templates)
+			// console.log('classNames:', classNames)
+			// console.log('settings:', settings)
+			// console.log('templates:', templates)
 
 			thisApp.initData()
 			thisApp.initMenu()
