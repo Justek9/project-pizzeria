@@ -1,7 +1,7 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
-	('use strict')
+	;('use strict')
 
 	const select = {
 		templateOf: {
@@ -342,16 +342,17 @@
 
 	class CartProduct {
 		constructor(menuProduct, element) {
-			const thisCartPrduct = this
-			thisCartPrduct.id = menuProduct.id
-			thisCartPrduct.name = menuProduct.name
-			thisCartPrduct.amount = menuProduct.amount
-			thisCartPrduct.priceSingle = menuProduct.priceSingle
-			thisCartPrduct.price = menuProduct.price
-			thisCartPrduct.params = menuProduct.params
-			console.log(thisCartPrduct)
-			thisCartPrduct.getElements(element)
-			thisCartPrduct.cartAmountWidget()
+			console.log(element)
+			const thisCartProduct = this
+			thisCartProduct.id = menuProduct.id
+			thisCartProduct.name = menuProduct.name
+			thisCartProduct.amount = menuProduct.amount
+			thisCartProduct.priceSingle = menuProduct.priceSingle
+			thisCartProduct.price = menuProduct.price
+			thisCartProduct.params = menuProduct.params
+			// console.log(thisCartProduct)
+			thisCartProduct.getElements(element)
+			thisCartProduct.cartAmountWidget()
 		}
 
 		getElements(element) {
@@ -362,13 +363,20 @@
 			thisCartProduct.dom.price = element.querySelector(select.cartProduct.price)
 			thisCartProduct.dom.edit = element.querySelector(select.cartProduct.edit)
 			thisCartProduct.dom.remove = element.querySelector(select.cartProduct.remove)
+			// console.log(thisCartProduct.dom)
 		}
 
 		cartAmountWidget() {
 			const thisCartProduct = this
+			// console.log(thisCartProduct.amount)
+
 			thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget)
+			thisCartProduct.amountWidget.setValue(thisCartProduct.amount)
+
 			thisCartProduct.dom.amountWidget.addEventListener('updated', function () {
-				console.log('amount widget changed')
+				thisCartProduct.amount = thisCartProduct.amountWidget.value
+				thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount
+				thisCartProduct.dom.price.innerHTML = thisCartProduct.price
 			})
 		}
 	}
