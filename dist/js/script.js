@@ -127,7 +127,6 @@
 			thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem)
 			thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper)
 			thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget)
-			// console.log(thisProduct.amountWidgetElem)
 		}
 
 		initAmountWidget() {
@@ -140,7 +139,6 @@
 
 		initAccordion() {
 			const thisProduct = this
-			// console.log(thisProduct);
 
 			/* [DONE] find the clickable trigger and add event listener to clickable trigger on event click */
 			thisProduct.accordionTrigger.addEventListener('click', function (event) {
@@ -162,17 +160,14 @@
 
 		initOrderForm() {
 			const thisProduct = this
-			// console.log('initOrderForm:')
 			thisProduct.form.addEventListener('submit', function (event) {
 				event.preventDefault()
 				thisProduct.processOrder()
-				// console.log('form submit');
 			})
 
 			for (let input of thisProduct.formInputs) {
 				input.addEventListener('change', function () {
 					thisProduct.processOrder()
-					// console.log('input change');
 				})
 			}
 
@@ -180,7 +175,6 @@
 				event.preventDefault()
 				thisProduct.processOrder()
 				thisProduct.addToCart()
-				// console.log('cart button clicked');
 			})
 		}
 
@@ -198,13 +192,11 @@
 			for (let paramId in thisProduct.data.params) {
 				// [DONE] determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
 				const param = thisProduct.data.params[paramId]
-				// console.log(paramId, param)
 
 				// [DONE] for every option in this category
 				for (let optionId in param.options) {
 					// [DONE] determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
 					const option = param.options[optionId]
-					// console.log(optionId, option)
 
 					// [DONE] check if price needs to be changed (steps 1-2)
 
@@ -273,8 +265,6 @@
 				params[paramId] = { label: param.label, options: {} }
 				// [DONE] for every option in this category
 				for (let optionId in param.options) {
-					// console.log('paramId:', paramId, 'optionId:', optionId)
-
 					// [DONE] determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
 					const option = param.options[optionId]
 
@@ -322,8 +312,10 @@
 
 			thisCart.dom.productList.addEventListener('updated', function () {
 				thisCart.update()
-				console.log(thisCart.dom.totalNumber)
-				if (thisCart.dom.totalNumber.innerHTML === 0) thisCart.dom.deliveryFee = 0
+			})
+
+			thisCart.dom.productList.addEventListener('remove', function (event) {
+				thisCart.remove(event.detail.cartProduct)
 			})
 		}
 
@@ -377,11 +369,26 @@
 				totalPrice.innerHTML = thisCart.totalPrice
 			}
 		}
+
+		remove(elementToRemove) {
+			const thisCart = this
+			// console.log(elementToRemove)
+			// console.log(elementToRemove.dom.wrapper)
+
+			// Remove from HTML
+			elementToRemove.dom.wrapper.remove()
+
+			// Remove from thisCart.products.
+			const indexOfElementToRemove = thisCart.products.indexOf(elementToRemove)
+			thisCart.products.splice(indexOfElementToRemove, 1)
+
+			// invoke update method.
+			thisCart.update()
+		}
 	}
 
 	class CartProduct {
 		constructor(menuProduct, element) {
-			// console.log(element)
 			const thisCartProduct = this
 			thisCartProduct.id = menuProduct.id
 			thisCartProduct.name = menuProduct.name
@@ -389,9 +396,9 @@
 			thisCartProduct.priceSingle = menuProduct.priceSingle
 			thisCartProduct.price = menuProduct.price
 			thisCartProduct.params = menuProduct.params
-			// console.log(thisCartProduct)
 			thisCartProduct.getElements(element)
 			thisCartProduct.cartAmountWidget()
+			thisCartProduct.initActions()
 		}
 
 		getElements(element) {
@@ -416,6 +423,31 @@
 				thisCartProduct.amount = thisCartProduct.amountWidget.value
 				thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount
 				thisCartProduct.dom.price.innerHTML = thisCartProduct.price
+			})
+		}
+
+		remove() {
+			const thisCartProduct = this
+			const event = new CustomEvent('remove', {
+				bubbles: true,
+				detail: {
+					cartProduct: thisCartProduct,
+				},
+			})
+
+			thisCartProduct.dom.wrapper.dispatchEvent(event)
+			// console.log('remove clicked')
+		}
+
+		initActions() {
+			const thisCartProduct = this
+			thisCartProduct.dom.edit.addEventListener('click', function (event) {
+				event.preventDefault()
+			})
+			thisCartProduct.dom.remove.addEventListener('click', function (event) {
+				event.preventDefault()
+				thisCartProduct.remove()
+				console.log('remove clicked')
 			})
 		}
 	}
@@ -446,11 +478,11 @@
 
 		init: function () {
 			const thisApp = this
-			// console.log('*** App starting ***')
+			console.log('*** App starting ***')
 			console.log('thisApp:', thisApp)
-			// console.log('classNames:', classNames)
-			// console.log('settings:', settings)
-			// console.log('templates:', templates)
+			console.log('classNames:', classNames)
+			console.log('settings:', settings)
+			console.log('templates:', templates)
 
 			thisApp.initData()
 			thisApp.initMenu()
@@ -474,8 +506,6 @@
 			thisWidget.input = element.querySelector(select.widgets.amount.input)
 			thisWidget.linkDecrease = element.querySelector(select.widgets.amount.linkDecrease)
 			thisWidget.linkIncrease = element.querySelector(select.widgets.amount.linkIncrease)
-
-			// console.log(thisWidget.input, thisWidget.linkDecrease, thisWidget.linkIncrease)
 		}
 
 		setValue(value) {
