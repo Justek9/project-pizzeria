@@ -299,6 +299,9 @@
 			thisCart.dom.subtotalPrice = element.querySelector(select.cart.subtotalPrice)
 			thisCart.dom.totalPrice = element.querySelectorAll(select.cart.totalPrice)
 			thisCart.dom.totalNumber = element.querySelector(select.cart.totalNumber)
+			thisCart.dom.form = element.querySelector(select.cart.form)
+			thisCart.dom.phone = element.querySelector(select.cart.phone)
+			thisCart.dom.address = element.querySelector(select.cart.address)
 		}
 
 		initActions() {
@@ -313,6 +316,12 @@
 
 			thisCart.dom.productList.addEventListener('remove', function (event) {
 				thisCart.remove(event.detail.cartProduct)
+			})
+
+			thisCart.dom.form.addEventListener('submit', function (event) {
+				event.preventDefault()
+				console.log('order clicked')
+				thisCart.sendOrder()
 			})
 		}
 
@@ -365,6 +374,7 @@
 			for (let totalPrice of thisCart.dom.totalPrice) {
 				totalPrice.innerHTML = thisCart.totalPrice
 			}
+			return
 		}
 
 		remove(elementToRemove) {
@@ -381,6 +391,38 @@
 
 			// invoke update method.
 			thisCart.update()
+		}
+
+		sendOrder() {
+			const thisCart = this
+			const url = settings.db.url + '/' + settings.db.orders
+
+			console.log(thisCart.totalPrice)
+			console.log(thisCart.dom.totalNumber.innerHTML)
+			const payload = {
+				address: thisCart.dom.address.value,
+				phone: thisCart.dom.phone.value,
+				totalPrice: thisCart.totalPrice,
+				subtotalPrice: thisCart.dom.subtotalPrice.innerHTML,
+				totalNumber: thisCart.dom.totalNumber.innerHTML,
+				deliveryFee: thisCart.dom.deliveryFee.innerHTML,
+				products: [],
+			}
+
+			for (let prod of thisCart.products) {
+				payload.products.push(prod.getData())
+			}
+
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(payload),
+			}
+
+			fetch(url, options)
+			// console.log(payload)
 		}
 	}
 
@@ -447,6 +489,19 @@
 				console.log('remove clicked')
 			})
 		}
+
+		getData() {
+			const thisCartProduct = this
+			const payloadProducts = {
+				id: thisCartProduct.id,
+				name: thisCartProduct.name,
+				amount: thisCartProduct.amount,
+				priceSingle: thisCartProduct.priceSingle,
+				price: thisCartProduct.price,
+				params: thisCartProduct.params,
+			}
+			return payloadProducts
+		}
 	}
 
 	const app = {
@@ -464,11 +519,11 @@
 			const thisApp = this
 			thisApp.data = {}
 			const url = settings.db.url + '/' + settings.db.products
-			fetch(url).then(
-				function (rawResponse) {
+			fetch(url)
+				.then(function (rawResponse) {
 					return rawResponse.json()
-				}
-			).then(function (parsedResponse) {
+				})
+				.then(function (parsedResponse) {
 					console.log('parsed response:', parsedResponse)
 					thisApp.data.products = parsedResponse
 					thisApp.initMenu()
