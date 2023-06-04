@@ -6,7 +6,7 @@
 	const select = {
 		templateOf: {
 			menuProduct: '#template-menu-product',
-			cartProduct: '#template-cart-product', // CODE ADDED
+			cartProduct: '#template-cart-product',
 		},
 		containerOf: {
 			menu: '#product-list',
@@ -27,13 +27,12 @@
 		},
 		widgets: {
 			amount: {
-				input: 'input.amount', // CODE CHANGED
+				input: 'input.amount',
 				linkDecrease: 'a[href="#less"]',
 				linkIncrease: 'a[href="#more"]',
 			},
 		},
 
-		// CODE ADDED START
 		cart: {
 			productList: '.cart__order-summary',
 			toggleTrigger: '.cart__summary',
@@ -52,7 +51,6 @@
 			edit: '[href="#edit"]',
 			remove: '[href="#remove"]',
 		},
-		// CODE ADDED END
 	}
 
 	const classNames = {
@@ -60,11 +58,9 @@
 			wrapperActive: 'active',
 			imageVisible: 'active',
 		},
-		// CODE ADDED START
 		cart: {
 			wrapperActive: 'active',
 		},
-		// CODE ADDED END
 	}
 
 	const settings = {
@@ -72,19 +68,21 @@
 			defaultValue: 1,
 			defaultMin: 0,
 			defaultMax: 9,
-		}, // CODE CHANGED
-		// CODE ADDED START
+		},
 		cart: {
 			defaultDeliveryFee: 20,
 		},
-		// CODE ADDED END
+
+		db: {
+			url: '//localhost:3131',
+			products: 'products',
+			orders: 'orders',
+		},
 	}
 
 	const templates = {
 		menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
-		// CODE ADDED START
 		cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
-		// CODE ADDED END
 	}
 
 	class Product {
@@ -98,7 +96,6 @@
 			thisProduct.initOrderForm()
 			thisProduct.initAmountWidget()
 			thisProduct.processOrder()
-			// console.log('new Product:', thisProduct)
 		}
 
 		renderInMenu() {
@@ -459,14 +456,24 @@
 
 			for (let productData in thisApp.data.products) {
 				// console.log(productData, thisApp.data.products[productData]);
-				new Product(productData, thisApp.data.products[productData])
+				new Product(thisApp.data.products[productData].id, thisApp.data.products[productData])
 			}
 		},
 
 		initData: function () {
 			const thisApp = this
-			thisApp.data = dataSource
-			// console.log(dataSource)
+			thisApp.data = {}
+			const url = settings.db.url + '/' + settings.db.products
+			fetch(url).then(
+				function (rawResponse) {
+					return rawResponse.json()
+				}
+			).then(function (parsedResponse) {
+					console.log('parsed response:', parsedResponse)
+					thisApp.data.products = parsedResponse
+					thisApp.initMenu()
+				})
+			console.log('this App data', JSON.stringify(thisApp.data))
 		},
 
 		initCart: function () {
@@ -485,7 +492,7 @@
 			console.log('templates:', templates)
 
 			thisApp.initData()
-			thisApp.initMenu()
+			// thisApp.initMenu()
 			thisApp.initCart()
 		},
 	}
