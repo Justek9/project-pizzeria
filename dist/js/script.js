@@ -374,7 +374,7 @@
 			for (let totalPrice of thisCart.dom.totalPrice) {
 				totalPrice.innerHTML = thisCart.totalPrice
 			}
-			return
+			
 		}
 
 		remove(elementToRemove) {
@@ -397,8 +397,8 @@
 			const thisCart = this
 			const url = settings.db.url + '/' + settings.db.orders
 
-			console.log(thisCart.totalPrice)
-			console.log(thisCart.dom.totalNumber.innerHTML)
+			// console.log(thisCart.totalPrice)
+			// console.log(thisCart.dom.totalNumber.innerHTML)
 			const payload = {
 				address: thisCart.dom.address.value,
 				phone: thisCart.dom.phone.value,
