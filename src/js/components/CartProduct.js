@@ -48,9 +48,7 @@ class CartProduct {
                 cartProduct: thisCartProduct,
             },
         })
-
         thisCartProduct.dom.wrapper.dispatchEvent(event)
-        // console.log('remove clicked')
     }
 
     initActions() {

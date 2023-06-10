@@ -1,6 +1,7 @@
 import { templates, settings, classNames, select } from './settings.js'
 import Cart from './components/Cart.js'
 import Product from './components/Product.js'
+import Booking from './components/Booking.js'
 
 const app = {
 	initPages: function () {
@@ -81,6 +82,16 @@ const app = {
 		})
 	},
 
+	initBooking() {
+		const thisApp = this
+
+		// find container to manage booking
+		thisApp.bookingWidget = document.querySelector(select.containerOf.booking)
+		console.log(thisApp.bookingWidget)
+
+		new Booking(thisApp.bookingWidget)
+	},
+
 	init: function () {
 		const thisApp = this
 		console.log('*** App starting ***')
@@ -93,6 +104,7 @@ const app = {
 		thisApp.initData()
 		// thisApp.initMenu()
 		thisApp.initCart()
+		thisApp.initBooking()
 	},
 }
 app.init()
