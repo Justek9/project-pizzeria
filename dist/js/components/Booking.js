@@ -31,7 +31,7 @@ class Booking {
 			eventsCurrent: settings.db.url + '/' + settings.db.events + '?' + params.eventsCurrent.join('&'),
 			eventsRepeat: settings.db.url + '/' + settings.db.events + '?' + params.eventsRepeat.join('&'),
 		}
-		// console.log(urls.booking)
+		console.log(urls)
 
 		Promise.all([fetch(urls.booking), fetch(urls.eventsCurrent), fetch(urls.eventsRepeat)])
 			.then(function (allResponses) {
