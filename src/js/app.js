@@ -64,7 +64,7 @@ const app = {
 				return rawResponse.json()
 			})
 			.then(function (parsedResponse) {
-				console.log('parsed response:', parsedResponse)
+				// console.log('parsed response:', parsedResponse)
 				thisApp.data.products = parsedResponse
 				thisApp.initMenu()
 			})
