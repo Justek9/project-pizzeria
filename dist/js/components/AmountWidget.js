@@ -11,7 +11,7 @@ class AmountWidget extends BaseWidget {
 		// console.log('Amount Widget:', thisWidget)
 	}
 
-	getElements(element) {
+	getElements() {
 		const thisWidget = this
 		// thisWidget.element = element
 		thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.amount.input)
