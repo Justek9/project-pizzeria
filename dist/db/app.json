@@ -200,7 +200,7 @@
 	],
 
 	"orders": [],
-   
+
 	"events": [
 		{
 			"id": 1,
@@ -253,5 +253,15 @@
 			"starters": ["lemonWater"]
 		}
 	],
-	"bookings": []
+	"bookings": [
+		{
+			"id": 5,
+			"date": "2023-06-14",
+			"hour": "18:00",
+			"table": 2,
+			"duration": 2,
+			"ppl": 3,
+			"starters": ["lemonWater"]
+		}
+	]
 }
