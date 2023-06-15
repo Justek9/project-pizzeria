@@ -112,36 +112,41 @@ class Booking {
 		thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper)
 		thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper)
 		thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables)
+		thisBooking.dom.floorPlan = document.querySelector(select.containerOf.floorPlan)
 	}
 
 	selectTable() {
 		const thisBooking = this
-		thisBooking.dom.floorPlan = document.querySelector(select.containerOf.floorPlan)
 		thisBooking.selectedTable = null
 
 		// set and reset selection on click event
 		thisBooking.dom.floorPlan.addEventListener('click', function (e) {
-			let allTables = document.querySelectorAll('.table')
-			for (let table of allTables) {
-				console.log(table)
-				if (table.classList.contains('selected')) {
-					table.classList.remove('selected')
-				}
-			}
-
 			if (e.target.classList.contains('table')) {
-				e.target.classList.toggle('selected')
+				thisBooking.resetSelection()
+				e.target.classList.add(classNames.booking.tableSelected)
 
-				if (e.target.classList.contains('selected')) {
+				if (e.target.classList.contains(classNames.booking.tableSelected)) {
 					thisBooking.selectedTable = e.target.innerHTML.replace('table-', '')
 				}
 			}
 			// unable selecting booked table
-			if (e.target.classList.contains('booked')) {
-				e.target.classList.remove('selected')
+			if (e.target.classList.contains(classNames.booking.tableBooked)) {
+				e.target.classList.remove(classNames.booking.tableSelected)
 				alert('This table is already taken. Please choose another one :)')
 			}
+			// console.log((thisBooking.selectedTable))
 		})
+	}
+
+	resetSelection() {
+		const thisBooking = this
+
+		for (let table of thisBooking.dom.tables) {
+			if (table.classList.contains(classNames.booking.tableSelected)) {
+				table.classList.remove(classNames.booking.tableSelected)
+			}
+		}
+		thisBooking.selectedTable = null
 	}
 
 	initWidgets() {
@@ -149,11 +154,13 @@ class Booking {
 
 		// Set people widget
 		thisBooking.peopleWidget = new AmountWidget(thisBooking.dom.peopleAmount)
-		thisBooking.dom.peopleAmount.addEventListener('updated', function () {})
+		thisBooking.dom.peopleAmount.addEventListener('updated', function () {
+			// console.log('people amount')
+		})
 
 		// Set hours widget
 		thisBooking.hoursWidget = new AmountWidget(thisBooking.dom.hoursAmount)
-		thisBooking.dom.peopleAmount.addEventListener('updated', function () {})
+		// thisBooking.hoursWidget.addEventListener('updated', function () {})
 
 		// Set date widget
 		thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker)
@@ -163,8 +170,9 @@ class Booking {
 
 		thisBooking.dom.wrapper.addEventListener('updated', function () {
 			thisBooking.updateDOM()
+			thisBooking.resetSelection()
 		})
-		console.log(thisBooking.dom.wrapper)
+		// console.log(thisBooking.dom.wrapper)
 	}
 
 	updateDOM() {
@@ -182,9 +190,7 @@ class Booking {
 			allAvailable = true
 		}
 
-		console.log(thisBooking.dom.tables)
 		for (let table of thisBooking.dom.tables) {
-			console.log(table)
 			let tableId = table.getAttribute(settings.booking.tableIdAttribute)
 			if (!isNaN(tableId)) {
 				tableId = parseInt(tableId)
