@@ -11,6 +11,8 @@ class Booking {
 		thisBooking.render(element)
 		thisBooking.initWidgets()
 		thisBooking.getData()
+		thisBooking.selectedTable
+		thisBooking.selectTable()
 	}
 
 	getData() {
@@ -112,6 +114,36 @@ class Booking {
 		thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables)
 	}
 
+	selectTable() {
+		const thisBooking = this
+		thisBooking.dom.floorPlan = document.querySelector(select.containerOf.floorPlan)
+		thisBooking.selectedTable = null
+
+		// set and reset selection on click event
+		thisBooking.dom.floorPlan.addEventListener('click', function (e) {
+			let allTables = document.querySelectorAll('.table')
+			for (let table of allTables) {
+				console.log(table)
+				if (table.classList.contains('selected')) {
+					table.classList.remove('selected')
+				}
+			}
+
+			if (e.target.classList.contains('table')) {
+				e.target.classList.toggle('selected')
+
+				if (e.target.classList.contains('selected')) {
+					thisBooking.selectedTable = e.target.innerHTML.replace('table-', '')
+				}
+			}
+			// unable selecting booked table
+			if (e.target.classList.contains('booked')) {
+				e.target.classList.remove('selected')
+				alert('This table is already taken. Please choose another one :)')
+			}
+		})
+	}
+
 	initWidgets() {
 		const thisBooking = this
 
@@ -132,6 +164,7 @@ class Booking {
 		thisBooking.dom.wrapper.addEventListener('updated', function () {
 			thisBooking.updateDOM()
 		})
+		console.log(thisBooking.dom.wrapper)
 	}
 
 	updateDOM() {

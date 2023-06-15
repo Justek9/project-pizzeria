@@ -157,6 +157,10 @@
   
       }
   
+      &.selected {
+        background-color: lightgreen;
+        border: 2px solid rgb(237, 169, 145);
+      }
       &.booked {
         cursor: not-allowed;
         color: lighten($color-dark, 40%);
@@ -198,3 +202,4 @@
     @include flex(row, flex-start, space-between);
     margin: ($base-size * 4) auto;
   }
+
