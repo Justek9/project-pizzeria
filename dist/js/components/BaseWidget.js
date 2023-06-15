@@ -12,7 +12,7 @@ class BaseWidget {
 	}
 
 	set value(value) {
-		console.log('using value setter')
+		// console.log('using value setter')
 		const thisWidget = this
 		const newValue = thisWidget.parseValue(value)
 
@@ -28,7 +28,7 @@ class BaseWidget {
 	setValue(value) {
 		const thisWidget = this
 
-		console.log('before setting')
+		// console.log('before setting')
 		thisWidget.value = value //calling setter value
 	}
 

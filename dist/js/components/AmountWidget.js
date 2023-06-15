@@ -6,14 +6,13 @@ class AmountWidget extends BaseWidget {
 		super(element, settings.amountWidget.defaultValue)
 		const thisWidget = this
 		thisWidget.getElements(element)
-		// thisWidget.setValue(settings.amountWidget.defaultValue)
+		thisWidget.setValue(settings.amountWidget.defaultValue)
 		thisWidget.initActions()
 		// console.log('Amount Widget:', thisWidget)
 	}
 
 	getElements() {
 		const thisWidget = this
-		// thisWidget.element = element
 		thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.amount.input)
 		thisWidget.dom.linkDecrease = thisWidget.dom.wrapper.querySelector(select.widgets.amount.linkDecrease)
 		thisWidget.dom.linkIncrease = thisWidget.dom.wrapper.querySelector(select.widgets.amount.linkIncrease)
