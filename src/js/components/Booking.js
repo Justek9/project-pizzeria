@@ -1,4 +1,4 @@
-import { templates, select, settings } from '../settings.js'
+import { templates, select, settings, classNames } from '../settings.js'
 import AmountWidget from './AmountWidget.js'
 import DatePicker from './DatePicker.js'
 import HourPicker from './HourPicker.js'
@@ -24,14 +24,14 @@ class Booking {
 			eventsCurrent: [settings.db.notRepeatParam, startDateParam, endDateParam],
 			eventsRepeat: [settings.db.repeatParam, endDateParam],
 		}
-		console.log('get data params', params)
+		// console.log('get data params', params)
 
 		const urls = {
 			booking: settings.db.url + '/' + settings.db.bookings + '?' + params.bookings.join('&'),
 			eventsCurrent: settings.db.url + '/' + settings.db.events + '?' + params.eventsCurrent.join('&'),
 			eventsRepeat: settings.db.url + '/' + settings.db.events + '?' + params.eventsRepeat.join('&'),
 		}
-		console.log(urls)
+		// console.log(urls)
 
 		Promise.all([fetch(urls.booking), fetch(urls.eventsCurrent), fetch(urls.eventsRepeat)])
 			.then(function (allResponses) {
@@ -41,10 +41,54 @@ class Booking {
 				return Promise.all([bookingResponse.json(), eventsCurrentResponse.json(), eventsRepeatResponse.json()])
 			})
 			.then(function ([bookings, eventsCurrent, eventsRepeat]) {
-				console.log(bookings)
-				console.log(eventsCurrent)
-				console.log(eventsRepeat)
+				// console.log(bookings)
+				// console.log(eventsCurrent)
+				// console.log(eventsRepeat)
+				thisBooking.parseData(bookings, eventsCurrent, eventsRepeat)
 			})
+	}
+
+	parseData(bookings, eventsCurrent, eventsRepeat) {
+		const thisBooking = this
+		thisBooking.booked = {}
+
+		for (let item of bookings) {
+			thisBooking.makeBooked(item.date, item.hour, item.duration, item.table)
+		}
+
+		for (let item of eventsCurrent) {
+			thisBooking.makeBooked(item.date, item.hour, item.duration, item.table)
+		}
+
+		const minDate = thisBooking.datePicker.minDate
+		const maxDate = thisBooking.datePicker.maxDate
+
+		for (let item of eventsRepeat) {
+			if (item.repeat == 'daily') {
+				for (let loopDate = minDate; loopDate <= maxDate; loopDate = utils.addDays(loopDate, 1)) {
+					thisBooking.makeBooked(utils.dateToStr(loopDate), item.hour, item.duration, item.table)
+				}
+			}
+		}
+		// console.log(thisBooking.booked)
+		thisBooking.updateDOM()
+	}
+
+	makeBooked(date, hour, duration, table) {
+		const thisBooking = this
+
+		if (typeof thisBooking.booked[date] == 'undefined') {
+			thisBooking.booked[date] = {}
+		}
+
+		const startHour = utils.hourToNumber(hour)
+
+		for (let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5) {
+			if (typeof thisBooking.booked[date][hourBlock] == 'undefined') {
+				thisBooking.booked[date][hourBlock] = []
+			}
+			thisBooking.booked[date][hourBlock].push(table)
+		}
 	}
 
 	render(element) {
@@ -63,10 +107,9 @@ class Booking {
 
 		thisBooking.dom.peopleAmount = document.querySelector(select.booking.peopleAmount)
 		thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount)
-		// console.log(thisBooking.dom.peopleAmount, thisBooking.dom.hoursAmount)
 		thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper)
 		thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper)
-		// console.log(thisBooking.dom.datePicker, thisBooking.dom.hourPicker)
+		thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables)
 	}
 
 	initWidgets() {
@@ -74,17 +117,52 @@ class Booking {
 
 		// Set people widget
 		thisBooking.peopleWidget = new AmountWidget(thisBooking.dom.peopleAmount)
-		thisBooking.dom.peopleAmount = addEventListener('updated', function () {})
+		thisBooking.dom.peopleAmount.addEventListener('updated', function () {})
 
 		// Set hours widget
 		thisBooking.hoursWidget = new AmountWidget(thisBooking.dom.hoursAmount)
-		thisBooking.dom.peopleAmount = addEventListener('updated', function () {})
+		thisBooking.dom.peopleAmount.addEventListener('updated', function () {})
 
 		// Set date widget
 		thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker)
 
 		// Set hour widget
 		thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker)
+
+		thisBooking.dom.wrapper.addEventListener('updated', function () {
+			thisBooking.updateDOM()
+		})
+	}
+
+	updateDOM() {
+		const thisBooking = this
+
+		thisBooking.date = thisBooking.datePicker.value
+		thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value)
+
+		let allAvailable = false
+
+		if (
+			typeof thisBooking.booked[thisBooking.date] == 'undefined' ||
+			typeof thisBooking.booked[thisBooking.date][thisBooking.hour] == 'undefined'
+		) {
+			allAvailable = true
+		}
+
+		console.log(thisBooking.dom.tables)
+		for (let table of thisBooking.dom.tables) {
+			console.log(table)
+			let tableId = table.getAttribute(settings.booking.tableIdAttribute)
+			if (!isNaN(tableId)) {
+				tableId = parseInt(tableId)
+			}
+
+			if (!allAvailable && thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)) {
+				table.classList.add(classNames.booking.tableBooked)
+			} else {
+				table.classList.remove(classNames.booking.tableBooked)
+			}
+		}
 	}
 }
 
