@@ -122,9 +122,12 @@ class Booking {
 		// set and reset selection on click event
 		thisBooking.dom.floorPlan.addEventListener('click', function (e) {
 			if (e.target.classList.contains('table')) {
-				thisBooking.resetSelection()
-				e.target.classList.add(classNames.booking.tableSelected)
-
+				if (e.target.classList.contains('selected')) {
+					thisBooking.resetSelection()
+				} else {
+					thisBooking.resetSelection()
+					e.target.classList.add(classNames.booking.tableSelected)
+				}
 				if (e.target.classList.contains(classNames.booking.tableSelected)) {
 					thisBooking.selectedTable = e.target.innerHTML.replace('table-', '')
 				}
@@ -146,7 +149,7 @@ class Booking {
 				table.classList.remove(classNames.booking.tableSelected)
 			}
 		}
-		thisBooking.selectedTable = null
+		// thisBooking.selectedTable = null
 	}
 
 	initWidgets() {
