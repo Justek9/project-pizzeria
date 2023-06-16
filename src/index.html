@@ -8,7 +8,7 @@
   <title>Pizzeria</title>
   <link href="https://fonts.googleapis.com/css?family=Lato:400,300i,700%7COswald:300,500,700&amp;subset=latin-ext"
     rel="stylesheet">
-  <!-- <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="./vendor/flickity.min.css" media="screen">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="./vendor/range-slider.min.css">
@@ -72,13 +72,13 @@
       <div id="main-page" class="main-page container">
         <div class="top-wrapper">
           <div class="order-online">
-            <a href="#order" class="img-link"><img src="./assets/orderOnline.jpg">
+            <a href="#order" class="img-link"><img src="./assets/orderOnline.jpg" alt="pizza on a plate">
               <h2 class="text-order">Order Online</h2>
             </a>
 
           </div>
           <div class="book-table">
-            <a href="#boking" class="img-link"><img src="./assets/bookTable (1).jpg">
+            <a href="#boking" class="img-link"><img src="./assets/bookTable (1).jpg" alt="dishes on a plate">
               <h2 class="text-book">Book a table</h2>
             </a>
           </div>
@@ -86,42 +86,86 @@
             <h2>Opening Hours</h2>
             <h3>Tue-Sun, 12PM - 12AM</h3>
           </div>
-
         </div>
-        <section class="opinion"></section>
+
+        <section class="opinion">
+          <div class="main-carousel" data-flickity='{"autoPlay": "true",
+          "wrapAround": "true" }'>
+            <div class="carousel-cell"><img src="./assets/opinion.jpg" alt="two women at table">
+              <div class="opinions-wrapper">
+                <h3>Amazing service!</h3>
+                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae hic blanditiis sint reprehenderit
+                  accusantium.
+                </p>
+                <p>-Margaret Osborne</p>
+              </div>
+            </div>
+            <div class="carousel-cell"><img src="./assets/opinion.jpg" alt="two women at table">
+              <div class="opinions-wrapper">
+
+                <h3>Great venue!</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae hic blanditiis sint reprehenderit
+                  accusantium.
+
+                </p>
+                <p>- Margaret Osborne</p>
+              </div>
+            </div>
+            <div class="carousel-cell"><img src="./assets/opinion.jpg" alt="two women at table">
+              <div class="opinions-wrapper">
+
+                <h3>Best snacks!</h3>
+                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae hic blanditiis sint reprehenderit
+                  accusantium.
+
+                </p>
+                <p>-Margaret Osborne</p>
+              </div>
+            </div>
+            <div class="carousel-cell"><img src="./assets/opinion.jpg" alt="two women at table">
+              <div class="opinions-wrapper">
+
+                <h3>Good value for money</h3>
+                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae hic blanditiis sint reprehenderit
+                  accusantium.
+                </p>
+                <p>-Margaret Osborne</p>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+
         <section class="gallery">
           <div class="img-gallery">
-            <img src="./assets/gallery (1).jpg">
-
+            <img src="./assets/gallery (1).jpg" alt="waiter with two paltes">
             <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-share-nodes"></i>
           </div>
           <div class="img-gallery">
-            <img src="./assets/gallery (2).jpg">
-            <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-share-nodes"></i>
-
-          </div>
-          <div class="img-gallery">
-            <img src="./assets/gallery (3).jpg">
+            <img src="./assets/gallery (2).jpg" alt="vegetables and salad">
             <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-share-nodes"></i>
           </div>
           <div class="img-gallery">
-            <img src="./assets/gallery (4).jpg">
+            <img src="./assets/gallery (3).jpg" alt="pizza cut in pieces">
             <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-share-nodes"></i>
           </div>
           <div class="img-gallery">
-            <img src="./assets/gallery (5).jpg">
+            <img src="./assets/gallery (4).jpg" alt="sign with open text">
             <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-share-nodes"></i>
           </div>
           <div class="img-gallery">
-            <img src="./assets/pizza-9.jpg">
+            <img src="./assets/gallery (5).jpg" alt="hands in flour">
+            <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <div class="img-gallery">
+            <img src="./assets/pizza-9.jpg" alt="open door to restaurant">
             <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-share-nodes"></i>
           </div>
         </section>
         <footer><a href="#">View more on Instagram</a></footer>
       </div>
-
     </section>
-
 
     <section id="order">
       <div id="product-list" class="product-list container"></div>
@@ -307,6 +351,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="./vendor/range-slider.min.js"></script>
+  <script src="./vendor/flickity.pkgd.min.js"></script>
   <script src="js/app.js" type="module"></script>
 </body>
 

@@ -43,6 +43,45 @@
 	}
 }
 
+// Flicky
+
+.main-arousel {
+	height: 250px;
+}
+.carousel-cell {
+	width: 100%;
+	margin: 10px;
+	display: flex;
+	flex-direction: row;
+	img {
+		height: 200px;
+		width: 200px;
+		border-radius: 4px;
+		object-fit: cover;
+	}
+}
+
+/* position dots in carousel */
+.flickity-page-dots {
+	bottom: 0px;
+}
+/* white circles */
+.flickity-page-dots .dot {
+	width: 12px;
+	height: 12px;
+	opacity: 1;
+	background: transparent;
+	border: 2px solid rgb(70, 68, 68);
+}
+/* fill-in selected dot */
+.flickity-page-dots .dot.is-selected {
+	background: rgb(20, 19, 19);
+}
+
+.opinions-wrapper {
+	padding: 2rem;
+}
+
 .img-link > img {
 	width: 100%;
 	height: 100%;
