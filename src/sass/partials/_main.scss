@@ -1,0 +1,152 @@
+.main-page {
+	margin: ($base-size * 3.5) auto;
+	background: $color-light;
+	border-radius: $radius;
+}
+.top-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.order-online,
+.book-table {
+	position: relative;
+	height: 100px;
+	width: 300px;
+}
+.text-order,
+.text-book {
+	color: $color-light;
+	text-transform: uppercase;
+	margin: 0;
+	font-size: 1.5rem;
+	font-family: $font-header;
+	font-weight: $font-normal;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.opening-hours {
+	background-color: $color-main;
+	color: white;
+	font-family: $font-header;
+	font-weight: $font-normal;
+	width: 100%;
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	h3 {
+		font-weight: $font-light;
+	}
+}
+
+.img-link > img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: -2;
+	border-radius: 5px;
+}
+.img-link > p {
+	text-transform: uppercase;
+}
+
+.gallery {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+
+	.img-gallery {
+		width: 200px;
+		height: 200px;
+		position: relative;
+		margin-top: 20px;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			z-index: -2;
+			border-radius: 5px;
+		}
+
+		&:hover {
+			img {
+				transition: $transition;
+				filter: brightness(30%);
+			}
+
+			i {
+				font-size: 1.5rem;
+				color: $color-light;
+				display: inline;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				margin-right: 5px;
+			}
+			.fa-share-nodes {
+				left: 70%;
+			}
+		}
+		i {
+			display: none;
+			position: absolute;
+			z-index: 10;
+			width: 30px;
+			height: 30px;
+			&:hover {
+				color: $color-danger;
+				cursor: pointer;
+			}
+		}
+	}
+}
+
+footer {
+	margin-top: 20px;
+	a {
+		color: $color-main;
+	}
+}
+// .portfolio-image {
+// 	height: 100%;
+// 	width: 100%;
+// 	&:hover {
+// 		img {
+// 			transition: $transition;
+// 			filter: brightness(30%);
+// 		}
+// 		.portfolio-btn {
+// 			display: block;
+// 			top: 50%;
+// 			left: 50%;
+// 			transform: translate(-50%, -50%);
+
+// 		}
+// 	}
+
+// 	img {
+// 		height: 100%;
+// 		width: 100%;
+// 		object-fit: cover;
+// 		z-index: -2;
+// 	}
+// 	.portfolio-btn {
+// 		display: none;
+// 		position: absolute;
+// 		z-index: 2;
+// 		min-width: 30px;
+// 		color: $color-main;
+// 		background-color: $color-main;
+// 		@include btn-style;
+// 		&:hover {
+// 			background-color: $color-white;
+// 			color: $color-main;
+// 		}
+// 	}
+// }
