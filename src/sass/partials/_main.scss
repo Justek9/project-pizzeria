@@ -1,49 +1,91 @@
+// General
 .main-page {
 	margin: ($base-size * 3.5) auto;
 	background: $color-light;
 	border-radius: $radius;
 }
+
+// Order and book a table section
 .top-wrapper {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	flex-wrap: wrap;
-}
-.order-online,
-.book-table {
-	position: relative;
-	height: 100px;
-	width: 300px;
-}
-.text-order,
-.text-book {
-	color: $color-light;
-	text-transform: uppercase;
-	margin: 0;
-	font-size: 1.5rem;
-	font-family: $font-header;
-	font-weight: $font-normal;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-.opening-hours {
-	background-color: $color-main;
-	color: white;
-	font-family: $font-header;
-	font-weight: $font-normal;
-	width: 100%;
-	margin-top: 0.5rem;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	h3 {
-		font-weight: $font-light;
+	.order-online,
+	.book-table {
+		position: relative;
+		height: 100px;
+		width: 320px;
+		margin-top: 1rem;
+		.text-order,
+		.text-book {
+			color: $color-light;
+			text-transform: uppercase;
+			margin: 0;
+			font-size: 1.5rem;
+			font-family: $font-header;
+			font-weight: $font-normal;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		.img-link {
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				z-index: -2;
+				border-radius: 5px;
+			}
+			P {
+				text-transform: uppercase;
+			}
+			.sub-text {
+				color: $color-light;
+				margin: 0;
+				font-size: 0.7rem;
+				font-family: $font-header;
+				font-weight: $font-normal;
+				position: absolute;
+				bottom: 0%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				display: none;
+			}
+			&:hover {
+				.text-book,
+				.text-order {
+					transition: all 0.5s ease-in-out;
+					top: 30%;
+				}
+				.sub-text {
+					top: 70%;
+					font-style: normal;
+					display: block;
+				}
+			}
+		}
+	}
+
+	.opening-hours {
+		background-color: $color-main;
+		color: white;
+		font-family: $font-header;
+		font-weight: $font-normal;
+		width: 100%;
+		margin-top: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		border-radius: 4px;
+		h3 {
+			font-weight: $font-light;
+		}
 	}
 }
 
-// Flicky
+// Flickity carousel with opinions
 
 .main-arousel {
 	height: 250px;
@@ -61,37 +103,29 @@
 	}
 }
 
-/* position dots in carousel */
 .flickity-page-dots {
 	bottom: 0px;
 }
-/* white circles */
 .flickity-page-dots .dot {
 	width: 12px;
 	height: 12px;
 	opacity: 1;
-	background: transparent;
-	border: 2px solid rgb(70, 68, 68);
+	background: rgb(229, 224, 224);
 }
-/* fill-in selected dot */
 .flickity-page-dots .dot.is-selected {
 	background: rgb(20, 19, 19);
 }
 
 .opinions-wrapper {
 	padding: 2rem;
+	p {
+		padding-right: 1rem;
+	}
+	.name {
+		font-style: italic;
+	}
 }
-
-.img-link > img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	z-index: -2;
-	border-radius: 5px;
-}
-.img-link > p {
-	text-transform: uppercase;
-}
+// Gallery
 
 .gallery {
 	display: flex;
@@ -145,47 +179,10 @@
 		}
 	}
 }
-
+// Footer
 footer {
 	margin-top: 20px;
 	a {
 		color: $color-main;
 	}
 }
-// .portfolio-image {
-// 	height: 100%;
-// 	width: 100%;
-// 	&:hover {
-// 		img {
-// 			transition: $transition;
-// 			filter: brightness(30%);
-// 		}
-// 		.portfolio-btn {
-// 			display: block;
-// 			top: 50%;
-// 			left: 50%;
-// 			transform: translate(-50%, -50%);
-
-// 		}
-// 	}
-
-// 	img {
-// 		height: 100%;
-// 		width: 100%;
-// 		object-fit: cover;
-// 		z-index: -2;
-// 	}
-// 	.portfolio-btn {
-// 		display: none;
-// 		position: absolute;
-// 		z-index: 2;
-// 		min-width: 30px;
-// 		color: $color-main;
-// 		background-color: $color-main;
-// 		@include btn-style;
-// 		&:hover {
-// 			background-color: $color-white;
-// 			color: $color-main;
-// 		}
-// 	}
-// }

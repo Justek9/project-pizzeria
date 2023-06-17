@@ -11,6 +11,7 @@ export const select = {
 		booking: '.booking-wrapper',
 		floorPlan: '.floor-plan',
 		starters: '.starters',
+		subpagesBookandOrder: ".img-link"
 	},
 	all: {
 		menuProducts: '#product-list > .product',

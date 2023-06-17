@@ -9,8 +9,7 @@ const app = {
 		thisApp.pages = document.querySelector(select.containerOf.pages).children
 		thisApp.navLinks = document.querySelectorAll(select.nav.links)
 		const idFromHash = window.location.hash.replace('#/', '')
-		// console.log(idFromHash)
-
+		thisApp.imgLinks = document.querySelectorAll(select.containerOf.subpagesBookandOrder)
 		let pageMatchingHash = thisApp.pages[0].id
 
 		for (let page of thisApp.pages) {
@@ -27,7 +26,16 @@ const app = {
 				event.preventDefault()
 				const id = clickedElement.getAttribute('href').replace('#', '')
 				thisApp.activatePage(id)
-				// change URL hash
+				window.location.hash = '#/' + id
+			})
+		}
+
+		for (let imgLink of thisApp.imgLinks) {
+			imgLink.addEventListener('click', function (event) {
+				const clickedElement = this
+				event.preventDefault()
+				const id = clickedElement.getAttribute('href').replace('#', '')
+				thisApp.activatePage(id)
 				window.location.hash = '#/' + id
 			})
 		}
@@ -47,10 +55,8 @@ const app = {
 
 	initMenu: function () {
 		const thisApp = this
-		// console.log('thisApp.data:', thisApp.data)
 
 		for (let productData in thisApp.data.products) {
-			// console.log(productData, thisApp.data.products[productData]);
 			new Product(thisApp.data.products[productData].id, thisApp.data.products[productData])
 		}
 	},
@@ -64,18 +70,15 @@ const app = {
 				return rawResponse.json()
 			})
 			.then(function (parsedResponse) {
-				// console.log('parsed response:', parsedResponse)
 				thisApp.data.products = parsedResponse
 				thisApp.initMenu()
 			})
-		// console.log('this App data', JSON.stringify(thisApp.data))
 	},
 
 	initCart: function () {
 		const thisApp = this
 		const cartElem = document.querySelector(select.containerOf.cart)
 		thisApp.cart = new Cart(cartElem)
-		// console.log(app.cart)
 		thisApp.productList = document.querySelector(select.containerOf.menu)
 		thisApp.productList.addEventListener('add-to-cart', function (event) {
 			app.cart.add(event.detail.product)
@@ -92,12 +95,6 @@ const app = {
 
 	init: function () {
 		const thisApp = this
-		// console.log('*** App starting ***')
-		// console.log('thisApp:', thisApp)
-		// console.log('classNames:', classNames)
-		// console.log('settings:', settings)
-		// console.log('templates:', templates)
-
 		thisApp.initPages()
 		thisApp.initData()
 		thisApp.initCart()
