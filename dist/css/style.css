@@ -809,7 +809,7 @@ input.error, select.error {
 
 .carousel-cell {
   width: 100%;
-  margin: 10px;
+  margin: 3rem;
   display: flex;
   flex-direction: row;
 }
