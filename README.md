@@ -1,4 +1,2 @@
-version 2.4
-Checkout my project here:
-<project-pizzeria.justek9.repl.co>
+Project Pizzeria. [Check it out here](https://project-pizzeria.justek9.repl.co)
 
