@@ -1,3 +1,3 @@
 version 2.4
-Website available at:
-<a>project-pizzeria.justek9.repl.co</a>
+[Checkout my project here:](project-pizzeria.justek9.repl.co)
+
